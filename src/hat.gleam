@@ -1,8 +1,9 @@
+import gleam/io
 import gleam/list
+import gleam/result
 
+external type Algorithm
 pub external type State
-
-/// A type for representing generators.
 pub type Generator(a) {
   Generator(fn(State) -> #(State, a))
 }
@@ -21,6 +22,17 @@ external fn length(List(a)) -> Int =
 
 external fn uniform_s(State) -> #(Float, State) =
   "rand" "uniform_s"
+
+external fn seed_s(Algorithm) -> State =
+  "rand" "seed_s"
+
+external fn default_algorithm() -> Algorithm =
+  "algorithm" "default_algorithm"
+
+pub fn second(pair: #(a, b)) -> b {
+  let #(_, a) = pair
+  a
+}
 
 fn map(gen: Generator(a), fun: fn(a) -> b) -> Generator(b) {
   let Generator(f) = gen
@@ -53,9 +65,24 @@ fn pick_within(n: Int) -> Generator(Int) {
   })
 }
 
-pub fn select_name(names: List(bit_string)) -> Generator(Result(bit_string, Nil)) {
+pub fn select_name(names: List(String)) -> Generator(Result(String, Nil)) {
   names
   |> length
   |> pick_within
   |> map(fn(n) { list.at(names, n) })
+}
+
+pub fn run(gen: Generator(Result(String, Nil))) -> Result(String, Nil) {
+  let Generator(f) = gen
+  default_algorithm()
+  |> seed_s()
+  |> f
+  |> second
+}
+
+pub fn main(){
+  select_name(["noam", "mark", "bob", "greg"])
+  |> run
+  |> result.unwrap
+  |> io.println
 }
