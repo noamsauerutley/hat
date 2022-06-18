@@ -1,7 +1,7 @@
-# hat_pull
+# hat
 
-[![Package Version](https://img.shields.io/hexpm/v/hat_pull)](https://hex.pm/packages/hat_pull)
-[![Hex Docs](https://img.shields.io/badge/hex-docs-ffaff3)](https://hexdocs.pm/hat_pull/)
+[![Package Version](https://img.shields.io/hexpm/v/hat)](https://hex.pm/packages/hat)
+[![Hex Docs](https://img.shields.io/badge/hex-docs-ffaff3)](https://hexdocs.pm/hat/)
 
 A Gleam project
 
@@ -18,7 +18,7 @@ gleam shell # Run an Erlang shell
 If available on Hex this package can be added to your Gleam project:
 
 ```sh
-gleam add hat_pull
+gleam add hat
 ```
 
-and its documentation can be found at <https://hexdocs.pm/hat_pull>.
+and its documentation can be found at <https://hexdocs.pm/hat>.

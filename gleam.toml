@@ -1,4 +1,4 @@
-name = "hat_pull"
+name = "hat"
 version = "0.0.1"
 licences = ["MIT"]
 description = "Pull a name out of a hat, automated in Gleam."
