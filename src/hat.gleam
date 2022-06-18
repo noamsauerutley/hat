@@ -18,17 +18,17 @@ fn length_or_1(list: List(a)) -> Int {
   }
 }
 
-fn select_name(names: List(String)) -> Result(String, Nil) {
-  names
+fn select_slip(slips: List(String)) -> Result(String, Nil) {
+  slips
   |> length_or_1
   |> uniform
   |> decrement
-  |> list.at(names, _)
+  |> list.at(slips, _)
 }
 
-pub fn pull(names: List(String)) -> Nil {
-  case select_name(names) {
-    Ok(name) -> io.println(name)
+pub fn pull(slips: List(String)) -> Nil {
+  case select_slip(slips) {
+    Ok(slip) -> io.println(slip)
     Error(Nil) -> io.println("oops")
   }
 }
