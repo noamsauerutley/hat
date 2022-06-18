@@ -1,88 +1,38 @@
 import gleam/io
 import gleam/list
-import gleam/result
-
-external type Algorithm
-pub external type State
-pub type Generator(a) {
-  Generator(fn(State) -> #(State, a))
-}
-
-external fn float(Int) -> Float =
-  "erlang" "float"
-
-external fn floor(Float) -> Float =
-  "math" "floor"
-
-external fn round(Float) -> Int =
-  "erlang" "round"
 
 external fn length(List(a)) -> Int =
   "erlang" "length"
 
-external fn uniform_s(State) -> #(Float, State) =
-  "rand" "uniform_s"
+external fn uniform(Int) -> Int =
+  "rand" "uniform"
 
-external fn seed_s(Algorithm) -> State =
-  "rand" "seed_s"
-
-external fn default_algorithm() -> Algorithm =
-  "algorithm" "default_algorithm"
-
-pub fn second(pair: #(a, b)) -> b {
-  let #(_, a) = pair
-  a
+fn decrement(int: Int) -> Int {
+  int - 1
 }
 
-fn map(gen: Generator(a), fun: fn(a) -> b) -> Generator(b) {
-  let Generator(f) = gen
-  let new_f = fn(seed_0) {
-    let #(seed_1, a) = f(seed_0)
-    #(seed_1, fun(a))
+fn length_or_1(list: List(a)) -> Int {
+  case length(list) {
+    0 -> 1
+    length -> length
   }
-  Generator(new_f)
 }
 
-fn uniform(seed: State) -> #(State, Float) {
-  let #(x, next_seed) = uniform_s(seed)
-  #(next_seed, x)
-}
-
-fn generate_float() -> Generator(Float) {
-  let f = fn(seed_0) {
-    let #(seed_1, x) = uniform(seed_0)
-    #(seed_1, x)
-  }
-  Generator(f)
-}
-
-fn pick_within(n: Int) -> Generator(Int) {
-  generate_float()
-  |> map(fn(x) {
-    x *. float(n)
-    |> floor
-    |> round
-  })
-}
-
-pub fn select_name(names: List(String)) -> Generator(Result(String, Nil)) {
+fn select_name(names: List(String)) -> Result(String, Nil) {
   names
-  |> length
-  |> pick_within
-  |> map(fn(n) { list.at(names, n) })
+  |> length_or_1
+  |> uniform
+  |> decrement
+  |> list.at(names, _)
 }
 
-pub fn run(gen: Generator(Result(String, Nil))) -> Result(String, Nil) {
-  let Generator(f) = gen
-  default_algorithm()
-  |> seed_s()
-  |> f
-  |> second
+pub fn pull(names: List(String)) -> Nil {
+  case select_name(names) {
+    Ok(name) -> io.println(name)
+    Error(Nil) -> io.println("oops")
+  }
 }
 
-pub fn main(){
-  select_name(["noam", "mark", "bob", "greg"])
-  |> run
-  |> result.unwrap
-  |> io.println
+pub fn main() {
+  io.println("✨")
 }
