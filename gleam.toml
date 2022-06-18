@@ -2,8 +2,16 @@ name = "hat"
 version = "0.0.1"
 licences = ["MIT"]
 description = "Pull a name out of a hat, automated in Gleam."
-links = { title = 'GitHub', href = 'https://github.com/noamsauerutley/hat-pull' }
-repository = { type = "github", user = "noamsauerutley", repo = "hat-pull" }
+
+[docs]
+links = [
+  { title = 'GitHub', href = 'https://github.com/noamsauerutley/noamsauerutley' }
+]
+
+[repository]
+type = "github"
+user = "noamsauerutley"
+repo = "noamsauerutley"
 
 [dependencies]
 gleam_stdlib = "~> 0.21"
